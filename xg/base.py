@@ -19,7 +19,11 @@ def command_clone(url, repo_name=None) -> int:
     xg clone [url] [destination]
     """
     if repo_name is None:
-        repo_name = RE_REPO_NAME.match(url)["repo"]
+        match = RE_REPO_NAME.match(url)
+        if not match:
+            print("Impossible de déterminer le nom du repo.")
+            return 1
+        repo_name = match["repo"]
     clone = run(["git", "clone", "--recurse-submodules", url, repo_name])
     if clone.returncode != 0:
         return clone.returncode
@@ -73,3 +77,27 @@ def command_add_force(*fichiers) -> int:
     """
     add = run(["git", "add", "--force", "--"] + list(fichiers))
     return add.returncode
+
+
+@register_command("Base", "d")
+def command_diff() -> int:
+    """
+    Affiche les changements non "staged".
+
+    Usage:
+    xg d
+    """
+    diff = run(["git", "diff"])
+    return diff.returncode
+
+
+@register_command("Base", "ds")
+def command_diff_staged() -> int:
+    """
+    Affiche les changements "staged".
+
+    Usage:
+    xg ds
+    """
+    diff = run(["git", "diff", "--staged"])
+    return diff.returncode
