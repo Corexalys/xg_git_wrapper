@@ -10,7 +10,14 @@ RE_REPO_NAME = re.compile(r"^.*?/?(?P<repo>[^:/]+?)(?:.git)?/?$")
 
 @register_command("Base", "clone")
 def command_clone(url, repo_name=None) -> int:
-    """Clone a repository."""
+    """
+    Clone un repo.
+
+    Usage:
+    xg clone [url]
+    ou
+    xg clone [url] [destination]
+    """
     if repo_name is None:
         repo_name = RE_REPO_NAME.match(url)["repo"]
     clone = run(["git", "clone", "--recurse-submodules", url, repo_name])
@@ -25,14 +32,14 @@ def command_clone(url, repo_name=None) -> int:
 
 @register_command("Base", "p")
 def command_push() -> int:
-    """Push on the remote."""
+    """Pousse le contenu du repo local sur le serveur."""
     push = run(["git", "push"])
     return push.returncode
 
 
 @register_command("Base", "P")
 def command_push_force(args: List[str]) -> int:
-    """Push force (with lease) on the remote."""
+    """Pousse le contenu du repo local sur le serveur. (mode force)"""
     push = run(["git", "push", "--force-with-lease"])
     return push.returncode
 

@@ -1,6 +1,7 @@
 """
 Our internal git wrapper.
 """
+from textwrap import dedent
 from typing import Dict, Callable, List, Optional
 
 from wcwidth import wcswidth
@@ -62,19 +63,26 @@ def _print_command_list() -> None:
         doc_column = []
         for name, command in commands.items():
             name_column.append(f"  xg {name}")
-            doc_column.append(command.__doc__ or "")
+            if command.__doc__ is None:
+                doc_column.append("")
+            else:
+                doc_lines = dedent(command.__doc__.strip()).split("\n")
+                doc_column.append(doc_lines[0])
         _print_columns([name_column, doc_column])
         print()
 
 
 def _print_command_help(cmd: Command) -> None:
     """Print the help for a given command."""
-    print(cmd.__doc__)
+    if cmd.__doc__ is None:
+        print("Pas de documentation disponnible.")
+    else:
+        print(dedent(cmd.__doc__).strip())
 
 
 @register_command("", "help")
 def command_help(command_name=None) -> int:
-    """Print a list of all available commands, or the help for a given one."""
+    """Affiche la liste des commandes, ou l'aide pour la commande donnée."""
     # No argument given, print list
     if command_name is None:
         _print_command_list()
