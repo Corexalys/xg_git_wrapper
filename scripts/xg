@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
 """
 An internal git wrapper to simplify the handling of submodules.
 """
 
 import sys
 
-from . import base, find_command, command_help
+from xg import base, find_command, command_help
 
 
 def main(args) -> int:
