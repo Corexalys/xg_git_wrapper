@@ -61,7 +61,7 @@ def _print_command_list() -> None:
         name_column = []
         doc_column = []
         for name, command in commands.items():
-            name_column.append(f"xg {name}")
+            name_column.append(f"  xg {name}")
             doc_column.append(command.__doc__ or "")
         _print_columns([name_column, doc_column])
         print()
