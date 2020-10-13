@@ -73,25 +73,20 @@ def _print_command_help(cmd: Command) -> None:
 
 
 @register_command("", "help")
-def command_help(args: List[str]) -> int:
+def command_help(command_name=None) -> int:
     """Print a list of all available commands, or the help for a given one."""
     # No argument given, print list
-    if len(args) == 0:
+    if command_name is None:
         _print_command_list()
         return 0
     # Command given as argument, print help if found, otherwise list
-    if len(args) == 1:
-        if (command := find_command(args[0])) is not None:
-            print()
-            print(f"Help for '{command.__cmd_name__}':")
-            print()
-            _print_command_help(command)
-            print()
-            return 0
-        print(f"Could not find command {args[0]}.")
-        _print_command_list()
-        return 1
-    # Invalid number of arguments, print help but return 1
-    print("Invalid number of arguments.")
+    if (command := find_command(command_name)) is not None:
+        print()
+        print(f"Help for '{command.__cmd_name__}':")
+        print()
+        _print_command_help(command)
+        print()
+        return 0
+    print(f"Could not find command {command_name}.")
     _print_command_list()
     return 1
