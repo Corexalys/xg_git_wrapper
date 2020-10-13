@@ -1,0 +1,22 @@
+"""
+An internal git wrapper to simplify the handling of submodules.
+"""
+
+import sys
+
+from . import base, find_command, command_help
+
+
+def main(args) -> int:
+    """Main function."""
+    if len(args) <= 1:
+        command_help([])
+        return 1
+    if (command := find_command(args[1])) is not None:
+        return command(args[2:])
+    # TODO run git command
+    return -1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
