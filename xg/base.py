@@ -24,14 +24,21 @@ def command_clone(url, repo_name=None) -> int:
 
 
 @register_command("Base", "p")
-def command_push(args: List[str]) -> int:
+def command_push() -> int:
     """Push on the remote."""
-    # TODO
-    return -1
+    push = run(["git", "push"])
+    return push.returncode
 
 
 @register_command("Base", "P")
 def command_push_force(args: List[str]) -> int:
     """Push force (with lease) on the remote."""
-    # TODO
-    return -1
+    push = run(["git", "push", "--force-with-lease"])
+    return push.returncode
+
+
+@register_command("Base", "s")
+def command_status() -> int:
+    """Affiche le status de la branche courante."""
+    status = run(["git", "status"])
+    return status.returncode
