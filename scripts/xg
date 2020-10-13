@@ -4,6 +4,7 @@ An internal git wrapper to simplify the handling of submodules.
 """
 
 import sys
+from subprocess import run
 
 from xg import base, find_command, command_help
 
@@ -15,8 +16,8 @@ def main(args) -> int:
         return 1
     if (command := find_command(args[1])) is not None:
         return command(args[2:])
-    # TODO run git command
-    return -1
+    git = run(['git'] + args[1:])
+    return git.returncode
 
 
 if __name__ == "__main__":
