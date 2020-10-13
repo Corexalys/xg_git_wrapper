@@ -38,7 +38,7 @@ def command_push() -> int:
 
 
 @register_command("Base", "P")
-def command_push_force(args: List[str]) -> int:
+def command_push_force() -> int:
     """Pousse le contenu du repo local sur le serveur. (mode force)"""
     push = run(["git", "push", "--force-with-lease"])
     return push.returncode

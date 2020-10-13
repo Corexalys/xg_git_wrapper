@@ -6,7 +6,8 @@ An internal git wrapper to simplify the handling of submodules.
 import sys
 from subprocess import run
 
-from xg import base, find_command, command_help
+from xg import find_command, command_help
+from xg import base, branches
 
 
 def main(args) -> int:
