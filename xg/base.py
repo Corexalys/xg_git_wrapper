@@ -49,3 +49,27 @@ def command_status() -> int:
     """Affiche le status de la branche courante."""
     status = run(["git", "status"])
     return status.returncode
+
+
+@register_command("Base", "a")
+def command_add(*fichiers) -> int:
+    """
+    Ajoute un ou plusieurs fichier aux fichiers "staged".
+
+    Usage:
+    xg a [nom_fichier] [nom_fichier] ...
+    """
+    add = run(["git", "add", "--"] + list(fichiers))
+    return add.returncode
+
+
+@register_command("Base", "A")
+def command_add_force(*fichiers) -> int:
+    """
+    Ajoute un ou plusieurs fichiers aux fichiers "staged". (mode force)
+
+    Usage:
+    xg A [nom_fichier] [nom_fichier] ...
+    """
+    add = run(["git", "add", "--force", "--"] + list(fichiers))
+    return add.returncode
