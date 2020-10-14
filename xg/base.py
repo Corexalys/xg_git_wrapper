@@ -2,13 +2,10 @@
 Commandes de "base" git: clone, pull, push...
 """
 
-import re
 from subprocess import run
 
 from . import register_command
-
-RE_REPO_NAME = re.compile(r"^.*?/?(?P<repo>[^:/]+?)(?:.git)?/?$")
-"""A regex that extracts the repo name from a git URL."""
+from .utils import try_get_repo_name
 
 
 @register_command("Base", "clone")
@@ -22,11 +19,9 @@ def command_clone(url, repo_name=None) -> int:
     xg clone [url] [destination]
     """
     if repo_name is None:
-        match = RE_REPO_NAME.match(url)
-        if not match:
-            print("Impossible de déterminer le nom du repo.")
+        repo_name = try_get_repo_name(url)
+        if repo_name is None:
             return 1
-        repo_name = match["repo"]
     clone = run(["git", "clone", "--recurse-submodules", url, repo_name])
     if clone.returncode != 0:
         return clone.returncode

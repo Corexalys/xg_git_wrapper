@@ -6,7 +6,7 @@ from subprocess import run
 
 from . import register_command
 
-from .base import RE_REPO_NAME
+from .utils import try_get_repo_name
 
 
 @register_command("Submodules", "ma")
@@ -19,13 +19,10 @@ def command_submodule_add(url, repo_name=None) -> int:
     ou
     xg ma [url] [destination]
     """
-    # TODO create an helper function to determine the URL.
     if repo_name is None:
-        match = RE_REPO_NAME.match(url)
-        if not match:
-            print("Impossible de déterminer le nom du repo.")
+        repo_name = try_get_repo_name(url)
+        if repo_name is None:
             return 1
-        repo_name = match["repo"]
     submodule = run(["git", "submodule", "add", "-b", "master", url, repo_name])
     if submodule.returncode != 0:
         return submodule.returncode

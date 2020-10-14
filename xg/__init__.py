@@ -4,6 +4,7 @@ Our internal git wrapper.
 from textwrap import dedent
 from typing import Dict, Callable, List, Optional
 
+from colorama import Fore, Style
 from wcwidth import wcswidth
 
 COLUMN_SPACING = "    "
@@ -95,6 +96,8 @@ def command_help(command_name=None) -> int:
         _print_command_help(command)
         print()
         return 0
-    print(f"Impossible de trouver la commande {command_name}.")
+    print(
+        f"{Fore.YELLOW}Impossible de trouver la commande {command_name}.{Style.RESET_ALL}"
+    )
     _print_command_list()
     return 1

@@ -4,6 +4,8 @@ Commandes pour créer et gérer des commits.
 
 from subprocess import run
 
+from colorama import Fore, Style
+
 from . import register_command
 
 
@@ -32,13 +34,17 @@ def command_commit_message(*words) -> int:
     # Show some warnings about commit message styling
     warnings_shown = False
     if len(message) > 50:
-        print("Un message de commit ne devrait pas dépasser 50 caractères !")
+        print(
+            f"{Fore.YELLOW}Un message de commit ne devrait pas dépasser 50 caractères !"
+        )
         warnings_shown = True
     if not message[0].isupper():
-        print("Un message de commit devrait commencer par une majuscule !")
+        print(
+            f"{Fore.YELLOW}Un message de commit devrait commencer par une majuscule !"
+        )
         warnings_shown = True
     if warnings_shown:
-        print()
+        print(Style.RESET_ALL)
 
     commit = run(["git", "commit", "-m", message])
     return commit.returncode

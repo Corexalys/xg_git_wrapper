@@ -8,5 +8,6 @@ setup(
     scripts=["scripts/xg"],
     install_requires=[
         "wcwidth",
+        "colorama",
     ],
 )
