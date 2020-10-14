@@ -58,6 +58,31 @@ def command_status() -> int:
     return status.returncode
 
 
+@register_command("Base", "pr")
+def command_pull_rebase() -> int:
+    """
+    Met à jour le repo ainsi que tout les submodules.
+
+    Usage:
+    xg pr
+    """
+    pull_rebase = run(["git", "pull", "--rebase"])
+    if pull_rebase.returncode != 0:
+        return pull_rebase.returncode
+    sub_init = run(["git", "submodule", "update", "--init", "--recursive"])
+    if sub_init.returncode != 0:
+        return sub_init.returncode
+    sub_checkout = run(
+        ["git", "submodule", "foreach", "--recursive", "git", "checkout", "master"]
+    )
+    if sub_checkout.returncode != 0:
+        return sub_checkout.returncode
+    sub_rebase = run(
+        ["git", "submodule", "foreach", "--recursive", "git", "pull", "--rebase"]
+    )
+    return sub_rebase.returncode
+
+
 @register_command("Base", "a")
 def command_add(*fichiers) -> int:
     """
