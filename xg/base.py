@@ -1,6 +1,9 @@
+"""
+Commandes de "base" git: clone, pull, push...
+"""
+
 import re
 from subprocess import run
-from typing import List
 
 from . import register_command
 

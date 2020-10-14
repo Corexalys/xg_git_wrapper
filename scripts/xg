@@ -7,7 +7,8 @@ import sys
 from subprocess import run
 
 from xg import find_command, command_help
-from xg import base, branches
+# Load the command modules to register their commands.
+from xg import base, branches, commits
 
 
 def main(args) -> int:

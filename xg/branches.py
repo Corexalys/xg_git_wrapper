@@ -1,3 +1,7 @@
+"""
+Commandes utilisées pour gérer des branches.
+"""
+
 from subprocess import run
 
 from . import register_command
