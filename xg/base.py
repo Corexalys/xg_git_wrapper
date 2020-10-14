@@ -82,6 +82,20 @@ def command_add_force(*fichiers) -> int:
     return add.returncode
 
 
+@register_command("Base", "l")
+def command_log() -> int:
+    """
+    Affiche un historique des commits.
+
+    Usage:
+    xg l
+    """
+    log = run(
+        ["git", "log", r"--format=%C(auto)%h %Cred%aN %Cblue%ar %C(auto)%d%n    %s%n"]
+    )
+    return log.returncode
+
+
 @register_command("Base", "d")
 def command_diff() -> int:
     """
