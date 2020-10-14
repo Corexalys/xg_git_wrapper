@@ -53,7 +53,7 @@ def _print_columns(columns: List[List[str]]) -> None:
 def _print_command_list() -> None:
     """Print the registered commands list."""
     print()
-    print("Available commands:")
+    print("Commandes disponnibles :")
     for group, commands in COMMANDS.items():
         if group:
             print(f"{group}:")
@@ -90,11 +90,11 @@ def command_help(command_name=None) -> int:
     # Command given as argument, print help if found, otherwise list
     if (command := find_command(command_name)) is not None:
         print()
-        print(f"Help for '{command.__cmd_name__}':")
+        print(f"Aide pour '{command.__cmd_name__}' :")
         print()
         _print_command_help(command)
         print()
         return 0
-    print(f"Could not find command {command_name}.")
+    print(f"Impossible de trouver la commande {command_name}.")
     _print_command_list()
     return 1

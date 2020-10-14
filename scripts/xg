@@ -7,6 +7,7 @@ import sys
 from subprocess import run
 
 from xg import find_command, command_help
+
 # Load the command modules to register their commands.
 from xg import base, branches, commits
 
@@ -17,7 +18,12 @@ def main(args) -> int:
         command_help()
         return 1
     if (command := find_command(args[1])) is not None:
-        return command(*args[2:])
+        try:
+            return command(*args[2:])
+        except TypeError:
+            print("Nombre d'arguments invalide.")
+            command_help(args[1])
+            return 1
     git = run(["git"] + args[1:])
     return git.returncode
 
