@@ -117,24 +117,28 @@ def command_log() -> int:
 
 
 @register_command("Base", "d")
-def command_diff() -> int:
+def command_diff(*args) -> int:
     """
     Affiche les changements non "staged".
 
     Usage:
     xg d
+    ou
+    xg d [fichier] [fichier] ...
     """
-    diff = run(["git", "diff"])
+    diff = run(["git", "diff"] + list(args))
     return diff.returncode
 
 
 @register_command("Base", "ds")
-def command_diff_staged() -> int:
+def command_diff_staged(*args) -> int:
     """
     Affiche les changements "staged".
 
     Usage:
     xg ds
+    ou
+    xg d [fichier] [fichier] ...
     """
-    diff = run(["git", "diff", "--staged"])
+    diff = run(["git", "diff", "--staged"] + list(args))
     return diff.returncode
