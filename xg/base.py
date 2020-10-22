@@ -126,7 +126,7 @@ def command_diff(*args) -> int:
     ou
     xg d [fichier] [fichier] ...
     """
-    diff = run(["git", "diff"] + list(args))
+    diff = run(["git", "diff", "--"] + list(args))
     return diff.returncode
 
 
@@ -140,5 +140,5 @@ def command_diff_staged(*args) -> int:
     ou
     xg d [fichier] [fichier] ...
     """
-    diff = run(["git", "diff", "--staged"] + list(args))
+    diff = run(["git", "diff", "--staged", "--"] + list(args))
     return diff.returncode
