@@ -31,6 +31,18 @@ def command_change_branch(branch_name) -> int:
     return checkout.returncode
 
 
+@register_command("Branches", "bl")
+def command_list_branches() -> int:
+    """
+    Liste les branches locales.
+
+    Usage:
+    xg bl
+    """
+    branch_list = run(["git", "branch", "--list"])
+    return branch_list.returncode
+
+
 @register_command("Branches", "bd")
 def command_branch_delete(branch_name) -> int:
     """
