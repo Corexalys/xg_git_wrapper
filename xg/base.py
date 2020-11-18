@@ -90,6 +90,20 @@ def command_add(*fichiers) -> int:
     return add.returncode
 
 
+@register_command("Base", "ap")
+def command_add(*fichiers) -> int:
+    """
+    Ajoute un ou plusieurs fichier aux fichiers "staged" en mode "patch".
+
+    Cette commande permet de n'ajouter qu'une partie d'un fichier.
+
+    Usage:
+    xg ap [nom_fichier] [nom_fichier] ...
+    """
+    add = run(["git", "add", "--patch", "--"] + list(fichiers))
+    return add.returncode
+
+
 @register_command("Base", "A")
 def command_add_force(*fichiers) -> int:
     """
