@@ -46,6 +46,17 @@ def command_push_force() -> int:
     return push.returncode
 
 
+@register_command("Base", "pu")
+def command_push(remote, branch) -> int:
+    """
+    Pousse le contenu d'une nouvelle branche sur le serveur.
+
+    Equivalent à `git push -u [remote] [branch]`
+    """
+    push = run(["git", "push", "-u", remote, branch])
+    return push.returncode
+
+
 @register_command("Base", "s")
 def command_status() -> int:
     """Affiche le status de la branche courante."""
