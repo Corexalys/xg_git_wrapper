@@ -17,7 +17,7 @@ MESSAGE_CHECKERS: List[MessageChecker] = []
 MESSAGE_MIN_LENGTH = 10
 MESSAGE_MAX_LENGTH = 50
 
-RE_MESSAGE_SPLIT = re.compile(r"^(?:(?P<prefix>\[.*?\]|.*?:)\s*)?(?P<body>.*)$")
+RE_MESSAGE_SPLIT = re.compile(r"^(?P<prefix>(?:\[.*?\]|.*?:)\s*)?(?P<body>.*)$")
 
 
 def _register_checker(checker):
