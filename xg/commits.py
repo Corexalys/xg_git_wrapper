@@ -19,6 +19,14 @@ MESSAGE_MAX_LENGTH = 50
 
 RE_MESSAGE_SPLIT = re.compile(r"^(?P<prefix>(?:\[.*?\]|.*?:)\s*)?(?P<body>.*)$")
 
+MESSAGE_SHORTEN = [
+    ("when", "if"),
+    (" and", ","),
+    ("Rename", "Move"),
+    ("rename", "move"),
+    ("README.md", "README"),
+]
+
 
 def _register_checker(checker):
     """Register a commit message checker."""
@@ -63,12 +71,15 @@ def command_commit() -> int:
     commit = run(["git", "commit"])
     return commit.returncode
 
+
 def _get_commit_message(base_message: str) -> str:
     """Ask the user for a message if the given one doesn't pass all checks."""
     message = base_message
     while True:
         print(end=Fore.YELLOW)
-        result = _merge_checker_results([checker(message) for checker in MESSAGE_CHECKERS])
+        result = _merge_checker_results(
+            [checker(message) for checker in MESSAGE_CHECKERS]
+        )
         if not result.shown_error:
             print(Style.RESET_ALL, end="")
             return message
@@ -81,13 +92,16 @@ def _get_commit_message(base_message: str) -> str:
                 print(">", suggestion)
             print(Style.RESET_ALL)
 
-        print("Entrez un nouveau message, ou appuyez sur 'Entrée' pour continuer avec le message actuel.")
-        new_message = input(">")
+        print(
+            "Entrez un nouveau message, ou appuyez sur 'Entrée' pour continuer avec le message actuel."
+        )
+        new_message = input("> ")
 
         if not new_message:
             return message
 
         message = new_message
+
 
 @register_command("Commits", "cm")
 def command_commit_message(*words) -> int:
@@ -197,7 +211,16 @@ def _check_max_length(msg: str) -> bool:
         print(
             f"Le message de commit est trop long ({len(msg)}/{MESSAGE_MAX_LENGTH} caractères) !"
         )
-        return CheckerResult(True)
+        print(">", msg[:MESSAGE_MAX_LENGTH], end=Fore.RED)
+        print(msg[MESSAGE_MAX_LENGTH:], end="")
+        print(Fore.YELLOW)
+        suggestion = msg
+        for (old, new) in MESSAGE_SHORTEN:
+            suggestion = suggestion.replace(old, new)
+        suggestions = []
+        if suggestion != msg:
+            suggestions.append(suggestion)
+        return CheckerResult(True, suggestions)
     return CheckerResult(False)
 
 
