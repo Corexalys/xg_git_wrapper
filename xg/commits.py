@@ -63,6 +63,31 @@ def command_commit() -> int:
     commit = run(["git", "commit"])
     return commit.returncode
 
+def _get_commit_message(base_message: str) -> str:
+    """Ask the user for a message if the given one doesn't pass all checks."""
+    message = base_message
+    while True:
+        print(end=Fore.YELLOW)
+        result = _merge_checker_results([checker(message) for checker in MESSAGE_CHECKERS])
+        if not result.shown_error:
+            print(Style.RESET_ALL, end="")
+            return message
+        print(Style.RESET_ALL)
+
+        if result.suggestions:
+            print(end=Fore.CYAN)
+            print("Voici des suggestions pour améliorer votre commit :")
+            for suggestion in result.suggestions:
+                print(">", suggestion)
+            print(Style.RESET_ALL)
+
+        print("Entrez un nouveau message, ou appuyez sur 'Entrée' pour continuer avec le message actuel.")
+        new_message = input(">")
+
+        if not new_message:
+            return message
+
+        message = new_message
 
 @register_command("Commits", "cm")
 def command_commit_message(*words) -> int:
@@ -74,18 +99,7 @@ def command_commit_message(*words) -> int:
     """
     message = " ".join(words)
 
-    # Show some warnings about commit message styling
-    print(end=Fore.YELLOW)
-    result = _merge_checker_results([checker(message) for checker in MESSAGE_CHECKERS])
-    if result.shown_error:
-        print(Style.RESET_ALL)
-
-    if result.suggestions:
-        print(end=Fore.CYAN)
-        print("Voici des suggestions pour améliorer votre commit :")
-        for suggestion in result.suggestions:
-            print(">", suggestion)
-        print(Style.RESET_ALL)
+    message = _get_commit_message(message)
 
     commit = run(["git", "commit", "-m", message])
     return commit.returncode
