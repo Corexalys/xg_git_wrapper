@@ -2,9 +2,11 @@
 """
 An internal git wrapper to simplify the handling of submodules.
 """
-
-import sys
+import atexit
+import os
+import readline
 from subprocess import run
+import sys
 
 from colorama import Fore, Style
 
@@ -14,11 +16,24 @@ from xg import find_command, command_help
 from xg import base, branches, commits, submodules
 
 
+def init_readline() -> None:
+    histfile = os.path.join(os.path.expanduser("~"), ".xg_history")
+    try:
+        readline.read_history_file(histfile)
+        # default history len is -1 (infinite), which may grow unruly
+        readline.set_history_length(1000)
+    except FileNotFoundError:
+        pass
+
+    atexit.register(readline.write_history_file, histfile)
+
+
 def main(args) -> int:
     """Main function."""
     if len(args) <= 1:
         command_help()
         return 1
+    init_readline()
     if (command := find_command(args[1])) is not None:
         try:
             return command(*args[2:])
